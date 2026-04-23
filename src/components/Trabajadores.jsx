@@ -10,26 +10,49 @@ const Trabajadores = ({ trabajadores, setTrabajadores, volver }) => {
   };
 
   return (
-    <div className="container mt-4">
-      <div className="d-flex justify-content-between mb-4">
-        <h2>👤 Gestión de Trabajadores</h2>
-        <button className="btn btn-secondary" onClick={volver}>Volver</button>
-      </div>
-      <form className="row g-3 mb-4 card p-3 shadow-sm flex-row" onSubmit={agregar}>
-        <div className="col-md-5"><input className="form-control" placeholder="Nombre completo" value={nuevo.nombre} onChange={e => setNuevo({...nuevo, nombre: e.target.value})} /></div>
-        <div className="col-md-5"><input className="form-control" placeholder="Cargo" value={nuevo.cargo} onChange={e => setNuevo({...nuevo, cargo: e.target.value})} /></div>
-        <div className="col-md-2"><button className="btn btn-primary w-100">Registrar</button></div>
+    <div className="container-fluid px-4 py-4">
+      <h3>Trabajadores</h3>
+
+      <form className="row g-3 mb-3" onSubmit={agregar}>
+        <div className="col-md-5">
+          <input className="form-control" placeholder="Nombre"
+            value={nuevo.nombre}
+            onChange={e => setNuevo({...nuevo, nombre:e.target.value})}/>
+        </div>
+        <div className="col-md-5">
+          <input className="form-control" placeholder="Cargo"
+            value={nuevo.cargo}
+            onChange={e => setNuevo({...nuevo, cargo:e.target.value})}/>
+        </div>
+        <div className="col-md-2">
+          <button className="btn btn-primary w-100">Agregar</button>
+        </div>
       </form>
-      <table className="table bg-white shadow-sm rounded">
-        <thead className="table-dark"><tr><th>ID</th><th>Nombre</th><th>Cargo</th><th>Acción</th></tr></thead>
+
+      <table className="table table-bordered table-hover">
+        <thead className="table-dark text-center">
+          <tr><th>ID</th><th>Nombre</th><th>Cargo</th><th></th></tr>
+        </thead>
         <tbody>
           {trabajadores.map(t => (
-            <tr key={t.id}><td>{t.id}</td><td>{t.nombre}</td><td>{t.cargo}</td>
-            <td><button className="btn btn-danger btn-sm" onClick={() => setTrabajadores(trabajadores.filter(x => x.id !== t.id))}>Eliminar</button></td></tr>
+            <tr key={t.id}>
+              <td>{t.id}</td>
+              <td>{t.nombre}</td>
+              <td>{t.cargo}</td>
+              <td>
+                <button className="btn btn-danger btn-sm"
+                  onClick={() => setTrabajadores(trabajadores.filter(x => x.id !== t.id))}>
+                  <i className="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
           ))}
         </tbody>
       </table>
+
+      <button className="btn btn-secondary" onClick={volver}>Volver</button>
     </div>
   );
 };
+
 export default Trabajadores;
