@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import Productos from './components/Productos';
@@ -12,19 +12,39 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [vistaActual, setVistaActual] = useState('inicio');
 
-  // Base de datos global
-  const [productos, setProductos] = useState([
-    { id: 1, nombre: 'Coca Cola 2L', precio: 12, stock: 20, categoria: 'Gaseosas' },
-    { id: 2, nombre: 'Paceña Lata', precio: 10, stock: 50, categoria: 'Cervezas' },
-    { id: 3, nombre: 'Vino Aranjuez', precio: 45, stock: 10, categoria: 'Vinos' }
-  ]);
+  const [productos, setProductos] = useState(() => {
+    const data = localStorage.getItem("productos");
+    return data ? JSON.parse(data) : [
+      { id: 1, nombre: 'Coca Cola 2L', precio: 12, stock: 20, categoria: 'Gaseosas' },
+      { id: 2, nombre: 'Paceña Lata', precio: 10, stock: 50, categoria: 'Cervezas' },
+      { id: 3, nombre: 'Vino Aranjuez', precio: 45, stock: 10, categoria: 'Vinos' }
+    ];
+  });
 
-  const [trabajadores, setTrabajadores] = useState([
-    { id: 1, nombre: 'Juan Pérez', cargo: 'Administrador' },
-    { id: 2, nombre: 'Ana García', cargo: 'Vendedor' }
-  ]);
+  const [trabajadores, setTrabajadores] = useState(() => {
+    const data = localStorage.getItem("trabajadores");
+    return data ? JSON.parse(data) : [
+      { id: 1, nombre: 'Juan Pérez', cargo: 'Administrador' },
+      { id: 2, nombre: 'Ana García', cargo: 'Vendedor' }
+    ];
+  });
 
-  const [ventasRealizadas, setVentasRealizadas] = useState([]);
+  const [ventasRealizadas, setVentasRealizadas] = useState(() => {
+    const data = localStorage.getItem("ventas");
+    return data ? JSON.parse(data) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("productos", JSON.stringify(productos));
+  }, [productos]);
+
+  useEffect(() => {
+    localStorage.setItem("trabajadores", JSON.stringify(trabajadores));
+  }, [trabajadores]);
+
+  useEffect(() => {
+    localStorage.setItem("ventas", JSON.stringify(ventasRealizadas));
+  }, [ventasRealizadas]);
 
   if (!isLoggedIn) return <Login onLogin={() => setIsLoggedIn(true)} />;
 
@@ -33,7 +53,7 @@ function App() {
       {vistaActual === 'inicio' && (
         <Dashboard setVistaActual={setVistaActual} onLogout={() => setIsLoggedIn(false)} />
       )}
-      
+
       {vistaActual === 'productos' && (
         <Productos productos={productos} setProductos={setProductos} volver={() => setVistaActual('inicio')} />
       )}
@@ -45,9 +65,9 @@ function App() {
       {vistaActual === 'ventas' && (
         <Ventas 
           productos={productos} 
-          setProductos={setProductos} 
-          setVentasRealizadas={setVentasRealizadas}
+          setProductos={setProductos}
           ventasRealizadas={ventasRealizadas}
+          setVentasRealizadas={setVentasRealizadas}
           volver={() => setVistaActual('inicio')} 
         />
       )}

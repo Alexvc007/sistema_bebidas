@@ -12,8 +12,8 @@ const Dashboard = ({ setVistaActual, onLogout }) => {
 
   return (
     <div className="bg-light min-vh-100">
-      <nav className="navbar navbar-dark bg-dark px-4">
-        <span className="navbar-brand fw-bold">SISTEMA BEBIDAS</span>
+      <nav className="navbar navbar-dark bg-primary px-4">
+        <span className="navbar-brand fw-bold">MiniMarket 3B</span>
         <button className="btn btn-danger btn-sm" onClick={onLogout}>
           <i className="bi bi-box-arrow-right"></i> Salir
         </button>

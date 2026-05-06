@@ -1,10 +1,6 @@
 import { useState } from 'react';
 
-const Productos = ({ volver }) => {
-  const [productos, setProductos] = useState([
-    { id: 1, nombre: 'Coca Cola 2L', precio: 12, categoria: 'Gaseosas' },
-    { id: 2, nombre: 'Paceña Lata', precio: 10, categoria: 'Cervezas' }
-  ]);
+const Productos = ({ productos, setProductos, volver }) => {
 
   const [nuevo, setNuevo] = useState({ nombre: '', precio: '', categoria: '' });
 
@@ -12,7 +8,11 @@ const Productos = ({ volver }) => {
     e.preventDefault();
     if (!nuevo.nombre || !nuevo.precio) return;
 
-    setProductos([...productos, { ...nuevo, id: Date.now() }]);
+    setProductos([
+      ...productos,
+      { ...nuevo, id: Date.now(), stock: 0 }
+    ]);
+
     setNuevo({ nombre: '', precio: '', categoria: '' });
   };
 
@@ -36,11 +36,13 @@ const Productos = ({ volver }) => {
                 value={nuevo.nombre}
                 onChange={e => setNuevo({...nuevo, nombre: e.target.value})}/>
             </div>
+
             <div className="col-md-3">
               <input type="number" className="form-control" placeholder="Precio"
                 value={nuevo.precio}
                 onChange={e => setNuevo({...nuevo, precio: e.target.value})}/>
             </div>
+
             <div className="col-md-3">
               <select className="form-select"
                 value={nuevo.categoria}
@@ -51,6 +53,7 @@ const Productos = ({ volver }) => {
                 <option>Vinos</option>
               </select>
             </div>
+
             <div className="col-md-2">
               <button className="btn btn-success w-100">Agregar</button>
             </div>
@@ -58,22 +61,15 @@ const Productos = ({ volver }) => {
         </div>
       </div>
 
-      <table className="table table-striped table-hover align-middle">
-        <thead className="table-dark">
-          <tr>
-            <th>ID</th><th>Nombre</th><th>Precio</th><th>Categoría</th><th></th>
-          </tr>
-        </thead>
+      <table className="table table-striped">
         <tbody>
           {productos.map(p => (
             <tr key={p.id}>
-              <td>{p.id}</td>
               <td>{p.nombre}</td>
               <td>{p.precio} Bs</td>
-              <td><span className="badge bg-info">{p.categoria}</span></td>
               <td>
                 <button className="btn btn-danger btn-sm" onClick={() => eliminarProducto(p.id)}>
-                  <i className="bi bi-trash"></i>
+                  Eliminar
                 </button>
               </td>
             </tr>
